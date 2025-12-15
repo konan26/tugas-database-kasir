@@ -1,49 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+@extends('layouts.app')
 
-<body class="bg-gray-100">
-<div class="flex justify-center items-center min-h-screen">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+@section('content')
+<div class="max-w-6xl mx-auto">
 
-        <h2 class="text-2xl font-bold text-center mb-6">Register</h2>
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Manajemen Petugas</h2>
 
-        <form method="POST" action="{{ route('register.submit') }}" class="space-y-4">
-            @csrf
+        <button onclick="openModal()"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            + Tambah Petugas
+        </button>
+    </div>
 
-            <input type="text" name="name" placeholder="Nama"
-                   class="w-full px-4 py-2 border rounded-lg" required>
+    {{-- ALERT --}}
+    @if(session('success'))
+        <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
 
-            <input type="email" name="email" placeholder="Email"
-                   class="w-full px-4 py-2 border rounded-lg" required>
-
-            <input type="password" name="password" placeholder="Password"
-                   class="w-full px-4 py-2 border rounded-lg" required>
-
-            <input type="password" name="password_confirmation" placeholder="Konfirmasi Password"
-                   class="w-full px-4 py-2 border rounded-lg" required>
-
-            <select name="role" class="w-full px-4 py-2 border rounded-lg" required>
-                <option value="">-- Pilih Role --</option>
-                <option value="admin">Admin</option>
-                <option value="petugas">Petugas</option>
-            </select>
-
-            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                Register
-            </button>
-        </form>
-
-        <p class="text-center mt-4 text-sm">
-            Sudah punya akun?
-            <a href="{{ route('admin.login') }}" class="text-blue-600 font-semibold">Login</a>
-        </p>
-
+    {{-- TABLE PETUGAS --}}
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="p-3 text-left">Nama</th>
+                    <th class="p-3 text-left">Email</th>
+                    <th class="p-3 text-center">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($petugas as $p)
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3">{{ $p->name }}</td>
+                        <td class="p-3">{{ $p->email }}</td>
+                        <td class="p-3 text-center">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+                                Petugas
+                            </span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="p-4 text-center text-gray-500">
+                            Belum ada petugas
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
-</body>
-</html>
+
+{{-- MODAL --}}
+<div id="modal"
+     class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50">
+
+    <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-4">Tambah Petugas</h3>
+
+        <form method="POST" action="{{ route('admin.petugas.store') }}" class="space-y-4">
+            @csrf
+
+            <input type="text" name="name" placeholder="Nama Petugas"
+                   class="w-full border rounded px-3 py-2" required>
+
+            <input type="email" name="email" placeholder="Email"
+                   class="w-full border rounded px-3 py-2" required>
+
+            <input type="password" name="password" placeholder="Password"
+                   class="w-full border rounded px-3 py-2" required>
+
+            <input type="password" name="password_confirmation"
+                   placeholder="Konfirmasi Password"
+                   class="w-full border rounded px-3 py-2" required>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button"
+                        onclick="closeModal()"
+                        class="px-4 py-2 bg-gray-300 rounded">
+                    Batal
+                </button>
+
+                <button class="px-4 py-2 bg-blue-600 text-white rounded">
+                    Simpan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- SCRIPT --}}
+<script>
+function openModal() {
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+</script>
+@endsection

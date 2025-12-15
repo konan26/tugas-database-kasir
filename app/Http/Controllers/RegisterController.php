@@ -8,28 +8,36 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    public function showRegister()
+    
+    public function createPetugas()
     {
-        return view('admin.register');
+        abort_unless(auth()->user()->role === 'admin', 403);
+
+        $petugas = User::where('role', 'petugas')
+            ->orderBy('name')
+            ->get();
+
+        return view('admin.register', compact('petugas'));
     }
 
-    public function register(Request $request)
+    public function storePetugas(Request $request)
     {
+        abort_unless(auth()->user()->role === 'admin', 403);
+
         $request->validate([
             'name'     => 'required|string|max:100',
             'email'    => 'required|email|unique:users',
             'password' => 'required|min:6|confirmed',
-            'role'     => 'required|in:admin,petugas'
         ]);
 
         User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => $request->role
+            'role'     => 'petugas' // DIPAKSA PETUGAS
         ]);
 
-        return redirect()->route('admin.login')
-            ->with('success', 'Registrasi berhasil, silakan login');
+        return redirect()->route('admin.petugas.create')
+            ->with('success', 'Petugas berhasil ditambahkan');
     }
 }

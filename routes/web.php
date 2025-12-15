@@ -13,22 +13,27 @@ Route::get('/login', [AdminAuthController::class, 'showLogin'])
 Route::post('/login', [AdminAuthController::class, 'login'])
     ->name('login.submit');
 
-// REGISTER
-Route::get('/register', [RegisterController::class, 'showRegister'])
-    ->name('register');
-
-Route::post('/register', [RegisterController::class, 'register'])
-    ->name('register.submit');
-
 // LOGOUT
 Route::post('/logout', [AdminAuthController::class, 'logout'])
     ->name('logout');
 
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
     Route::resource('/produk', ProdukController::class);
-    Route::get('/pembelian', [PembelianController::class, 'index'])->name('pembelian.index');
-    Route::post('/pembelian', [PembelianController::class, 'store'])->name('pembelian.store');
+
+    Route::get('/pembelian', [PembelianController::class, 'index'])
+        ->name('pembelian.index');
+
+    Route::post('/pembelian', [PembelianController::class, 'store'])
+        ->name('pembelian.store');
+
+    // REGISTER PETUGAS (ADMIN ONLY)
+    Route::get('/petugas/create', [RegisterController::class, 'createPetugas'])
+        ->name('petugas.create');
+
+    Route::post('/petugas', [RegisterController::class, 'storePetugas'])
+        ->name('petugas.store');
 });
 
 Route::middleware('auth')->prefix('petugas')->name('petugas.')->group(function () {

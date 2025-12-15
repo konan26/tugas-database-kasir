@@ -26,6 +26,13 @@
             </a>
         </div>
 
+        @if($user->role === 'admin')
+            <a href="{{ route('admin.petugas.create') }}"
+            class="hover:underline">
+                Tambah Petugas
+            </a>
+        @endif
+
         <div class="flex items-center space-x-4">
             <span class="text-sm">
                 {{ $user->name }} ({{ ucfirst($user->role) }})
