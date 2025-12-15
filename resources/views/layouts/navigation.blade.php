@@ -2,15 +2,14 @@
     <div class="max-w-7xl mx-auto flex justify-between">
         <div class="font-bold">Dashboard</div>
         <div>
-            <a href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                class="text-red-600">
-                Logout
-            </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+            <form action="{{ route('logout') }}" method="POST">
                 @csrf
+                <button type="submit"
+                    class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white">
+                    Logout
+                </button>
             </form>
+
         </div>
     </div>
 </nav>

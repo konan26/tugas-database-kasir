@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@php
+    $role = auth()->user()->role;
+    $routePrefix = $role === 'admin' ? 'admin' : 'petugas';
+@endphp
+
 @section('content')
 <div class="max-w-7xl mx-auto px-4">
 
@@ -8,7 +13,7 @@
             📦 Pendataan Barang
         </h2>
 
-        <a href="{{ route('produk.create') }}"
+        <a href="{{ route($routePrefix . '.produk.create') }}"
            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow">
             + Tambah Produk
         </a>
@@ -38,12 +43,13 @@
                     <td class="p-3">Rp {{ number_format($p->harga) }}</td>
                     <td class="p-3">{{ $p->stok }}</td>
                     <td class="p-3 text-center flex justify-center gap-2">
-                        <a href="{{ route('produk.edit', $p->id) }}"
+                        <a href="{{ route($routePrefix . '.produk.edit', $p->id) }}"
                            class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded text-xs">
                             Edit
                         </a>
 
-                        <form method="POST" action="{{ route('produk.destroy', $p->id) }}">
+                        <form method="POST"
+                              action="{{ route($routePrefix . '.produk.destroy', $p->id) }}">
                             @csrf
                             @method('DELETE')
                             <button onclick="return confirm('Hapus produk ini?')"

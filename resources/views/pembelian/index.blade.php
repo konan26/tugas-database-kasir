@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    $routePrefix = auth()->user()->role === 'admin' ? 'admin' : 'petugas';
+@endphp
+
 @section('content')
 <div class="max-w-7xl mx-auto">
 
@@ -13,7 +17,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.pembelian.store') }}">
+    <form method="POST" action="{{ route($routePrefix . '.pembelian.store') }}">
         @csrf
 
         <div class="grid grid-cols-3 gap-6">

@@ -7,12 +7,19 @@ use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
+    private function produkIndexRoute()
+    {
+        return auth()->user()->role === 'admin'
+            ? 'admin.produk.index'
+            : 'petugas.produk.index';
+    }
+
     public function index()
     {
         $produk = Produk::all();
         return view('produk.index', compact('produk'));
     }
-
+    
     public function create()
     {
         return view('produk.create');
@@ -28,7 +35,7 @@ class ProdukController extends Controller
 
         Produk::create($request->all());
 
-        return redirect()->route('produk.index')
+        return redirect()->route($this->produkIndexRoute())
             ->with('success', 'Produk berhasil ditambahkan');
     }
 
@@ -47,15 +54,15 @@ class ProdukController extends Controller
 
         $produk->update($request->all());
 
-        return redirect()->route('produk.index')
-            ->with('success', 'Produk berhasil diupdate');
+        return redirect()->route($this->produkIndexRoute())
+            ->with('success', 'Produk berhasil diperbarui');
     }
 
     public function destroy(Produk $produk)
     {
         $produk->delete();
 
-        return redirect()->route('produk.index')
+        return redirect()->route($this->produkIndexRoute())
             ->with('success', 'Produk berhasil dihapus');
     }
 }

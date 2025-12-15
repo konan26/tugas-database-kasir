@@ -9,7 +9,7 @@ class AdminAuthController extends Controller
 {
     public function showLogin()
     {
-        return view('login');
+        return view('admin.login');
     }
 
     public function login(Request $request)
@@ -22,13 +22,12 @@ class AdminAuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // 🔀 ARAHKAN SESUAI ROLE
             if (Auth::user()->role === 'admin') {
-                return redirect()->route('produk.index');
+                return redirect()->route('admin.produk.index');
             }
 
             if (Auth::user()->role === 'petugas') {
-                return redirect()->route('produk.index');
+                return redirect()->route('petugas.produk.index');
             }
 
             Auth::logout();
@@ -44,7 +43,8 @@ class AdminAuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('admin.login')
+            ->with('logout', 'Yappa, kamu telah logout!');
     }
 
 }

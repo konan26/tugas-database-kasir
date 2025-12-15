@@ -40,7 +40,7 @@
 
         <p class="text-center mt-4 text-sm">
             Sudah punya akun?
-            <a href="{{ route('login') }}" class="text-blue-600 font-semibold">Login</a>
+            <a href="{{ route('admin.login') }}" class="text-blue-600 font-semibold">Login</a>
         </p>
 
     </div>
