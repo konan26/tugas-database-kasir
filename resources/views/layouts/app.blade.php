@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplikasi Kasir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+<nav class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
+    <div class="flex space-x-6 font-semibold">
+        <a href="{{ route('produk.index') }}" class="hover:underline">
+            Pendataan Barang
+        </a>
+
+        <a href="{{ route('admin.pembelian.index') }}" class="hover:underline">
+            Pembelian
+        </a>
+    </div>
+
+    <div class="flex items-center space-x-4">
+        <span class="text-sm">
+            {{ Auth::user()->name }} (Admin)
+        </span>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">
+                Logout
+            </button>
+        </form>
+    </div>
+</nav>
+
+<div class="p-6">
+    @yield('content')
+</div>
+
+</body>
+</html>
