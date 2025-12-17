@@ -20,10 +20,24 @@ public function index()
     return view('pembelian.index', compact('produk', 'members'));
 }
 
-   public function store(Request $request)
+ public function store(Request $request)
 {
+    $request->validate([
+        'items' => 'required',
+        'total' => 'required|numeric|min:0',
+        'member_nama' => 'nullable|string|max:100',
+    ]);
+
     $items = json_decode($request->items, true);
-    $member = Member::find($request->member_id);
+
+    // Cari member berdasarkan NAMA (case-insensitive)
+    $member = null;
+    if ($request->filled('member_nama')) {
+        $member = Member::whereRaw(
+            'LOWER(nama) = ?',
+            [strtolower($request->member_nama)]
+        )->first();
+    }
 
     DB::transaction(function () use ($request, $items, $member) {
 

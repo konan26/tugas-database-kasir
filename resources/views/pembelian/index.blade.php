@@ -77,6 +77,20 @@
                 <h3 class="font-semibold mb-4 text-lg border-b pb-2 text-blue-400">
                     Keranjang
                 </h3>
+                <!-- INPUT MEMBER -->
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-blue-400 mb-1">
+                        Nama Member (Opsional)
+                    </label>
+
+                    <input type="text"
+                        name="member_nama"
+                        id="memberInput"
+                        placeholder="Ketik nama member"
+                        class="w-full border rounded px-3 py-2 text-blue-400">
+                    
+                    <small id="memberStatus" class="text-sm"></small>
+                </div>
 
                 <table class="w-full text-sm mb-4">
                     <thead class="text-blue-400">
@@ -93,6 +107,15 @@
                     <div class="flex justify-between font-bold text-lg text-green-600">
                         <span>Total</span>
                         <span id="grandTotal">Rp 0</span>
+                    </div>
+                    <div class="flex justify-between text-sm mt-2 text-blue-400">
+                        <span>Diskon</span>
+                        <span id="diskonText">Rp 0</span>
+                    </div>
+
+                    <div class="flex justify-between font-bold text-lg text-green-700 mt-1">
+                        <span>Total Bayar</span>
+                        <span id="totalBayarText">Rp 0</span>
                     </div>
 
                     <input type="hidden" name="total" id="inputTotal">
@@ -211,5 +234,29 @@ function prepareSubmit() {
     document.getElementById('inputTotal').value = total;
     document.getElementById('inputItems').value = JSON.stringify(cart);
 }
+
+const memberInput = document.getElementById('memberInput');
+const memberStatus = document.getElementById('memberStatus');
+
+// Data member dari backend
+const members = @json($members);
+
+memberInput?.addEventListener('input', () => {
+    const nama = memberInput.value.trim().toLowerCase();
+    const found = members.find(m => m.nama.toLowerCase() === nama);
+
+    if (!nama) {
+        memberStatus.innerText = '';
+        return;
+    }
+
+    if (found) {
+        memberStatus.innerText = `✔ Member ditemukan (${found.diskon}% diskon)`;
+        memberStatus.className = 'text-green-600 text-sm';
+    } else {
+        memberStatus.innerText = '✖ Member tidak ditemukan (Non Member)';
+        memberStatus.className = 'text-red-500 text-sm';
+    }
+});
 </script>
 @endsection
