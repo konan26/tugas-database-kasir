@@ -7,58 +7,60 @@ use App\Models\Penjualan;
 use App\Models\DetailPenjualan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Member;
 
 class PembelianController extends Controller
 {
-    public function index()
-    {
-        $produk = Produk::orderBy('nama_produk')->get();
-        return view('pembelian.index', compact('produk'));
-    }
 
-    public function store(Request $request)
-    {
-        $items = json_decode($request->items, true);
+public function index()
+{
+    $produk = Produk::orderBy('nama_produk')->get();
+    $members = Member::orderBy('nama')->get();
 
-        DB::transaction(function () use ($request, $items) {
+    return view('pembelian.index', compact('produk', 'members'));
+}
 
-            // ✅ CEK STOK DULU
-            foreach ($items as $item) {
-                $produk = Produk::lockForUpdate()->find($item['produk_id']);
+   public function store(Request $request)
+{
+    $items = json_decode($request->items, true);
+    $member = Member::find($request->member_id);
 
-                if ($produk->stok < $item['jumlah']) {
-                    throw new \Exception('Stok produk ' . $produk->nama_produk . ' tidak mencukupi');
-                }
+    DB::transaction(function () use ($request, $items, $member) {
+
+        foreach ($items as $item) {
+            $produk = Produk::lockForUpdate()->find($item['produk_id']);
+            if ($produk->stok < $item['jumlah']) {
+                throw new \Exception('Stok tidak mencukupi');
             }
+        }
 
-            // ✅ SIMPAN PENJUALAN
-            $penjualan = Penjualan::create([
-                'tanggal_penjualan' => now(),
-                'total_harga' => $request->total
+        $total = $request->total;
+        $diskon = $member ? ($total * $member->diskon / 100) : 0;
+        $totalBayar = $total - $diskon;
+
+        $penjualan = Penjualan::create([
+            'member_id' => $member?->id,
+            'tanggal_penjualan' => now(),
+            'total_harga' => $total,
+            'diskon' => $diskon,
+            'total_bayar' => $totalBayar
+        ]);
+
+        foreach ($items as $item) {
+            DetailPenjualan::create([
+                'penjualan_id' => $penjualan->id,
+                'produk_id' => $item['produk_id'],
+                'jumlah' => $item['jumlah'],
+                'subtotal' => $item['subtotal']
             ]);
 
-            foreach ($items as $item) {
+            Produk::where('id', $item['produk_id'])
+                ->decrement('stok', $item['jumlah']);
+        }
+    });
 
-                DetailPenjualan::create([
-                    'penjualan_id' => $penjualan->id,
-                    'produk_id' => $item['produk_id'],
-                    'jumlah' => $item['jumlah'],
-                    'subtotal' => $item['subtotal']
-                ]);
+    return back()->with('success', '✅ Transaksi berhasil');
+}
 
-                // ✅ KURANGI STOK
-                Produk::where('id', $item['produk_id'])
-                    ->decrement('stok', $item['jumlah']);
-            }
-        });
-
-        return redirect()
-            ->route(
-                auth()->user()->role === 'admin'
-                    ? 'admin.pembelian.index'
-                    : 'petugas.pembelian.index'
-            )
-            ->with('success', '✅ Transaksi berhasil & stok diperbarui');
-            }
 
 }

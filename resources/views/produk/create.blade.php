@@ -5,9 +5,9 @@
 @endphp
 
 @section('content')
-<div class="max-w-xl mx-auto bg-white shadow rounded-lg p-6">
+<div class="max-w-xl mx-auto bg-white shadow rounded-lg p-6 border border-blue-200">
 
-    <h2 class="text-xl font-bold mb-6 text-gray-700">
+    <h2 class="text-xl font-bold mb-6 text-blue-400">
         ➕ Tambah Produk
     </h2>
 
@@ -17,30 +17,43 @@
         @csrf
 
         <div>
-            <label class="block text-sm font-medium text-gray-600">Nama Produk</label>
+            <label class="block text-sm font-medium text-blue-400">
+                Nama Produk
+            </label>
             <input type="text" name="nama_produk"
-                   class="w-full mt-1 border rounded px-3 py-2" required>
+                   class="w-full mt-1 border border-blue-200 rounded px-3 py-2
+                          focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                   required>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-600">Harga</label>
+            <label class="block text-sm font-medium text-blue-400">
+                Harga
+            </label>
             <input type="number" name="harga"
-                   class="w-full mt-1 border rounded px-3 py-2" required>
+                   class="w-full mt-1 border border-blue-200 rounded px-3 py-2
+                          focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                   required>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-600">Stok</label>
+            <label class="block text-sm font-medium text-blue-400">
+                Stok
+            </label>
             <input type="number" name="stok"
-                   class="w-full mt-1 border rounded px-3 py-2" required>
+                   class="w-full mt-1 border border-blue-200 rounded px-3 py-2
+                          focus:ring-2 focus:ring-blue-300 focus:outline-none"
+                   required>
         </div>
 
-        <div class="flex justify-end gap-2">
+        <div class="flex justify-end gap-2 pt-2">
             <a href="{{ route($routePrefix . '.produk.index') }}"
-               class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">
+               class="px-4 py-2 rounded bg-red-400 text-white hover:bg-red-500 transition">
                 Batal
             </a>
 
-            <button class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white">
+            <button
+                class="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition">
                 Simpan
             </button>
         </div>

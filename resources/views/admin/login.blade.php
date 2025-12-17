@@ -16,7 +16,7 @@
         <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md border">
 
             <!-- Title -->
-            <h2 class="text-3xl font-bold text-center mb-8 text-gray-700">
+            <h2 class="text-3xl font-bold text-center mb-8 text-blue-500">
                 Login
             </h2>
 
@@ -26,43 +26,42 @@
 
                 <!-- Email -->
                 <div>
-                    <label class="text-gray-600 font-medium">Email</label>
+                    <label class="text-blue-400 font-medium">Email</label>
                     <input 
                         type="email"
                         name="email"
                         required
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        class="w-full mt-1 px-4 py-2 border rounded-lg 
+                               text-blue-500 placeholder-blue-300
+                               focus:ring-2 focus:ring-blue-400 focus:outline-none"
                         placeholder="Masukkan email admin">
                 </div>
 
                 <!-- Password -->
                 <div>
-                    <label class="text-gray-600 font-medium">Password</label>
+                    <label class="text-blue-400 font-medium">Password</label>
                     <input 
                         type="password"
                         name="password"
                         required
-                        class="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        class="w-full mt-1 px-4 py-2 border rounded-lg 
+                               text-blue-500 placeholder-blue-300
+                               focus:ring-2 focus:ring-blue-400 focus:outline-none"
                         placeholder="Masukkan password">
                 </div>
 
                 <!-- Button -->
                 <button 
                     type="submit"
-                    class="w-full bg-blue-600 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+                    class="w-full bg-blue-400 text-white py-2 rounded-lg text-lg font-semibold hover:bg-blue-500 transition">
                     Login
                 </button>
 
             </form>
 
-            <p class="text-center mt-4 text-sm">
-            Belum punya akun?
-            <a href="{{ route('register') }}" class="text-blue-600 font-semibold">Register</a>
-        </p>
-
             <!-- Error Message -->
             @if(session('error'))
-                <p class="text-red-600 text-center mt-4 text-sm">
+                <p class="text-blue-400 text-center mt-4 text-sm">
                     {{ session('error') }}
                 </p>
             @endif

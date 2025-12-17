@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penjualan', function (Blueprint $table) {
-            $table->id();
-            $table->dateTime('tanggal_penjualan');
-            $table->integer('total_harga');
-            $table->timestamps();
-        });
+       Schema::create('penjualan', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('member_id')->nullable()->constrained('members')->nullOnDelete();
+    $table->dateTime('tanggal_penjualan');
+    $table->integer('total_harga');
+    $table->integer('diskon')->default(0);
+    $table->integer('total_bayar');
+    $table->timestamps();
+});
+
     }
 
     /**

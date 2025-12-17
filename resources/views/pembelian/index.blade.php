@@ -7,7 +7,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto">
 
-    <h2 class="text-2xl font-bold mb-6 text-gray-700">
+    <h2 class="text-2xl font-bold mb-6 text-blue-400">
         🧾 Transaksi Pembelian / Kasir
     </h2>
 
@@ -24,12 +24,12 @@
 
             <!-- DAFTAR PRODUK -->
             <div class="col-span-2 bg-white shadow rounded-lg p-6">
-                <h3 class="font-semibold mb-4 text-lg border-b pb-2">
+                <h3 class="font-semibold mb-4 text-lg border-b pb-2 text-blue-400">
                     Daftar Produk
                 </h3>
 
                 <table class="w-full text-sm border">
-                    <thead class="bg-gray-100">
+                    <thead class="bg-blue-50 text-blue-400">
                         <tr>
                             <th class="p-2 border text-left">Produk</th>
                             <th class="p-2 border text-center">Harga</th>
@@ -40,16 +40,18 @@
 
                     <tbody>
                         @foreach($produk as $p)
-                        <tr class="hover:bg-gray-50">
-                            <td class="p-2 border">{{ $p->nama_produk }}</td>
-                            <td class="p-2 border text-center">
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-2 border text-blue-400">
+                                {{ $p->nama_produk }}
+                            </td>
+                            <td class="p-2 border text-center text-green-600">
                                 Rp {{ number_format($p->harga) }}
                             </td>
                             <td class="p-2 border text-center">
                                 <input type="number"
                                        min="1"
                                        value="1"
-                                       class="jumlah w-20 border rounded px-2 py-1 text-center">
+                                       class="jumlah w-20 border rounded px-2 py-1 text-center text-blue-400">
                             </td>
                             <td class="p-2 border text-center">
                                 <button type="button"
@@ -60,10 +62,9 @@
                                         {{ $p->stok }},
                                         this
                                     )"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs">
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
                                     + Tambah
                                 </button>
-
                             </td>
                         </tr>
                         @endforeach
@@ -73,12 +74,12 @@
 
             <!-- KERANJANG -->
             <div class="bg-white shadow rounded-lg p-6">
-                <h3 class="font-semibold mb-4 text-lg border-b pb-2">
+                <h3 class="font-semibold mb-4 text-lg border-b pb-2 text-blue-400">
                     Keranjang
                 </h3>
 
                 <table class="w-full text-sm mb-4">
-                    <thead>
+                    <thead class="text-blue-400">
                         <tr class="border-b">
                             <th>Barang</th>
                             <th class="text-center">Jumlah</th>
@@ -89,7 +90,7 @@
                 </table>
 
                 <div class="border-t pt-4">
-                    <div class="flex justify-between font-bold text-lg">
+                    <div class="flex justify-between font-bold text-lg text-green-600">
                         <span>Total</span>
                         <span id="grandTotal">Rp 0</span>
                     </div>
@@ -124,7 +125,6 @@ function tambahItem(id, nama, harga, stok, btn) {
     const existing = cart.find(item => item.produk_id === id);
     const jumlahDiKeranjang = existing ? existing.jumlah : 0;
 
-    // ✅ Cek stok
     if (jumlah + jumlahDiKeranjang > stok) {
         alert('❌ Stok tidak mencukupi');
         return;
@@ -136,10 +136,10 @@ function tambahItem(id, nama, harga, stok, btn) {
     } else {
         cart.push({
             produk_id: id,
-            nama: nama,
-            harga: harga,
-            jumlah: jumlah,
-            stok: stok,
+            nama,
+            harga,
+            jumlah,
+            stok,
             subtotal: jumlah * harga
         });
     }
@@ -177,7 +177,7 @@ function renderCart() {
     cart.forEach(item => {
         total += item.subtotal;
         cartEl.innerHTML += `
-            <tr class="border-b">
+            <tr class="border-b text-blue-400">
                 <td>${item.nama}</td>
                 <td class="text-center">
                     <button type="button"
@@ -190,7 +190,7 @@ function renderCart() {
                         onclick="updateJumlah(${item.produk_id}, 1)"
                         class="px-2 bg-green-500 text-white rounded">+</button>
                 </td>
-                <td class="text-right">
+                <td class="text-right text-green-600">
                     Rp ${item.subtotal.toLocaleString()}
                 </td>
             </tr>
