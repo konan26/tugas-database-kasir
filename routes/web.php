@@ -41,4 +41,6 @@ Route::middleware('auth')->prefix('petugas')->name('petugas.')->group(function (
     Route::resource('/produk', ProdukController::class);
     Route::get('/pembelian', [PembelianController::class, 'index'])->name('pembelian.index');
     Route::post('/pembelian', [PembelianController::class, 'store'])->name('pembelian.store');
+    Route::resource('/members', MemberController::class)
+        ->except(['destroy']);
 });

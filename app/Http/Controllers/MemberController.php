@@ -26,10 +26,11 @@ class MemberController extends Controller
             'diskon' => 'required|integer|min:0|max:100',
         ]);
 
-        Member::create($request->all());
+        Member::create($request->only(['nama', 'no_hp', 'diskon']));
 
-        return redirect()->route('admin.members.index')
-            ->with('success', 'Member berhasil ditambahkan');
+        return redirect()
+        ->route($this->routePrefix() . '.members.index')
+        ->with('success', 'Member berhasil ditambahkan');
     }
 
     public function edit(Member $member)
@@ -47,15 +48,28 @@ class MemberController extends Controller
 
         $member->update($request->all());
 
-        return redirect()->route('admin.members.index')
+        return redirect()
+            ->route($this->routePrefix() . '.members.index')
             ->with('success', 'Member berhasil diperbarui');
     }
 
     public function destroy(Member $member)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+
         $member->delete();
 
-        return redirect()->route('admin.members.index')
+        return redirect()
+            ->route($this->routePrefix() . '.members.index')
             ->with('success', 'Member berhasil dihapus');
+}
+
+
+    private function routePrefix()
+    {
+        return auth()->user()->role === 'admin' ? 'admin' : 'petugas';
+
     }
 }

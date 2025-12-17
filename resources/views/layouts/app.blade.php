@@ -28,10 +28,11 @@
                 Pembelian
             </a>
 
-            <a href="{{ route('admin.members.index') }}"
-                class="hover:text-green-300 transition">
-                    Data Member
+            <a href="{{ route($routePrefix . '.members.index') }}"
+            class="hover:text-green-300 transition">
+                Data Member
             </a>
+
 
             @if($user->role === 'admin')
                 <a href="{{ route('admin.petugas.create') }}"
